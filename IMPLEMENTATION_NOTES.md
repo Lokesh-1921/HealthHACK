@@ -39,3 +39,7 @@ These unknowns are absent from confirmed current-edition content. The participat
 ## Verification
 
 Inspected at 320 × 740 (compact phone), 360 × 800 (small phone), 768 × 1024 (tablet), 1366 × 900 (laptop) and 1920 × 1080 (wide desktop). Checked the full illustration’s intrinsic ratio and viewport bounds, no horizontal overflow, all seven milestones, ten focus areas, five awards, team fee, all names/roles, email, registration links, QR decoding and original PDF delivery. Tested mobile menu open/close, Escape focus return, anchor offsets, native keyboard accordions, skip link, active navigation, reduced-motion visibility and completed-edition behavior after 29 January 2027. Production build and browser console checks pass. Axe WCAG 2/2.1 A/AA audits at phone and laptop widths return zero automated violations after correcting secondary-label contrast. Automated audits complement the manual keyboard and visual checks; they are not a certification. Detailed QA results are in the workspace `tmp/qa/` directory.
+
+## Vercel preparation follow-up
+
+See `VERCEL_READINESS.md` for the clean Node 22 production build, asset/HTTP audit, compiled-preview browser checks, and current registration form review. The signed-in browser now confirms the form title is “VITB-JHU Health-Hack 2027: Registration Form”; anonymous HTTP access still returns 401. Its final-stage year and registration-opening day conflict with the brochure and require organizer correction. The website content and registration destination remain brochure-authoritative.

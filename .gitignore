@@ -1,5 +1,37 @@
-node_modules
-.sites-runtime
-.env
-.DS_Store
+# Dependencies and generated output
+node_modules/
+dist/
+build/
+coverage/
 *.tsbuildinfo
+
+# Local environment and hosting state
+.env
+.env.*
+!.env.example
+!.env.*.example
+.vercel/
+.sites-runtime/
+.cache/
+
+# Credentials and private keys
+credentials.json
+credentials.*.json
+.git-credentials
+.netrc
+.npmrc.local
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+
+# Temporary files, logs and OS metadata
+tmp/
+temp/
+*.tmp
+*.temp
+*.log
+*.tar.gz
+.DS_Store
+Thumbs.db

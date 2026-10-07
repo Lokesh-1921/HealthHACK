@@ -1,22 +1,82 @@
 # Health Hackathon 3.0
 
-A responsive React + TypeScript + Tailwind CSS website for the Global Health Access Innovation Challenge – Next Generation, 28–29 January 2027, VIT Bhopal University. Workshop: 27 January 2027.
+A responsive event website for **Global Health Access Innovation Challenge – Next Generation**, jointly branded for VIT Bhopal University and Johns Hopkins Whiting School of Engineering.
 
-## Run locally
+- **Hackathon:** 28–29 January 2027
+- **Workshop:** 27 January 2027
+- **Venue:** VIT Bhopal University
+
+## Features
+
+- Responsive split hero with the complete healthcare illustration extracted from the event brochure.
+- Ten healthcare innovation tracks, seven timeline milestones, five prizes, and team registration information.
+- Organizing committee, coordinators, industry partners, institutional profiles, and participation FAQs.
+- Registration links, the brochure's original QR code, downloadable PDF, and email contact.
+- Sticky navigation, working URL fragments, smooth scrolling, active-section indicators, and back-to-top navigation.
+- Staggered entrances, one-time scroll reveals, animated accordions, and menu opening/closing transitions.
+- Keyboard-accessible controls, visible focus states, and support for reduced-motion preferences.
+- Timeline highlighting based on the Asia/Kolkata calendar and an automatic completed-event state after 29 January 2027.
+
+## Technology stack
+
+React 19, TypeScript 5, Vite 7, Tailwind CSS 4, and Lucide React icons. Motion uses lightweight CSS, IntersectionObserver, and the Web Animations API. Fonts are self-hosted.
+
+## Local setup
+
+Use Node.js 22 and npm. With nvm installed, `.nvmrc` selects the correct Node version.
 
 ```sh
-npm install
-npm run dev -- --port 5173
+nvm use
+npm ci
+npm run dev
 ```
 
-Open http://127.0.0.1:5173. Build with `npm run build`; serve the production output with `npm run preview`.
+Open http://127.0.0.1:5173. No environment variables or backend services are required.
+
+## Production build and preview
+
+```sh
+npm run build
+npm run preview -- --port 4173 --strictPort
+```
+
+Open http://127.0.0.1:4173. The preview serves the compiled files in `dist`; it is a local verification server. Build output is generated and excluded from Git.
+
+## Deployment
+
+### Vercel
+
+Import the repository and select the directory containing `package.json` and `vercel.json` as the Root Directory. If the repository begins with the project files, use `.`; if importing the parent workspace, select `health-hackathon`.
+
+The checked-in configuration uses:
+
+| Setting | Value |
+| --- | --- |
+| Framework | Vite |
+| Node.js | 22.x |
+| Install command | `npm ci` |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+
+No environment variables are required. Alternatively, run `npx vercel` from the project directory for a preview deployment and `npx vercel --prod` to publish.
+
+### Other static hosts
+
+Run `npm ci` and `npm run build`, then publish the contents of `dist` at the site's root. Assets use root-relative paths. Navigation uses fragments such as `/#overview`, so no client-side route rewrite is required. Preserve direct delivery of the PDF, images, and fonts.
+
+Once the final public domain is selected, add it to the canonical and Open Graph URL metadata in `index.html` if needed.
 
 ## Content and assets
 
-- `src/data/event.ts`: authoritative current-edition data, dates, prizes, tracks, committee, coordinators, partners, institutions, email and configurable registration URL.
-- `src/data/previousEdition.json`: all 15 previous-edition detailed problem statements, explicitly unconfirmed and never rendered as current-edition requirements.
-- `public/health-hackathon-3-brochure.pdf`: unmodified two-page brochure supplied by the user.
-- `public/assets/`: authentic artwork, logos, emblem, campus images, and QR extracted from the brochure’s original embedded page JPEGs.
-- `IMPLEMENTATION_NOTES.md`: source comparison, registration verification, unresolved organizer details and verification results.
+- `src/data/event.ts`: current-edition event data, dates, tracks, prizes, committee, coordinators, partners, institutional profiles, and registration destination.
+- `src/data/previousEdition.json`: historical reference data; its problem statements are not rendered as confirmed requirements for this edition.
+- `public/health-hackathon-3-brochure.pdf`: original two-page event brochure.
+- `public/assets/`: brochure artwork, institutional logos, event emblem, campus images, and registration QR code.
+- `public/fonts/`: self-hosted font files and their required license notices.
+- `IMPLEMENTATION_NOTES.md`: source precedence, asset provenance, and organizer confirmation items.
+- `MOTION_NOTES.md`: animation behavior and verification notes.
+- `VERCEL_READINESS.md`: production checks and registration form review.
 
-The timeline uses the current calendar date in Asia/Kolkata. On 7 October 2026, Idea submission (31 October 2026) is the next milestone. The final registration window remains current until 31 December. After 29 January 2027 the site switches to a completed-edition state. No precise event opening time is assumed.
+The brochure is authoritative for this edition. Keep its published currency equivalents and verify event changes with the organizers before updating the content. The external registration form's access policy and conflicting dates are documented in the verification notes.
+
+Required font licenses and source-supported institutional attribution are retained.
