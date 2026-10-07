@@ -9,7 +9,18 @@ export default function AnimatedAccordion({ summary, children, defaultOpen = fal
   const animation = useRef<Animation>(null);
   const desired = useRef(defaultOpen);
   const [expanded, setExpanded] = useState(defaultOpen);
-  useEffect(() => () => animation.current?.cancel(), []);
+  useEffect(() => {
+    const preference = matchMedia('(prefers-reduced-motion: reduce)');
+    const settle = () => {
+      if (!preference.matches || !animation.current) return;
+      animation.current.cancel();
+      animation.current = null;
+      if (details.current) details.current.open = desired.current;
+      if (body.current) body.current.style.overflow = '';
+    };
+    preference.addEventListener('change', settle);
+    return () => { animation.current?.cancel(); preference.removeEventListener('change', settle); };
+  }, []);
   const toggle = () => {
     const element = details.current, content = body.current;
     if (!element || !content) return;
@@ -29,7 +40,14 @@ export default function AnimatedAccordion({ summary, children, defaultOpen = fal
     }
     const end = opening ? content.scrollHeight : 0;
     content.style.overflow = 'hidden';
-    const current = content.animate([{ height: `${start}px`, opacity: startOpacity }, { height: `${end}px`, opacity: opening ? 1 : 0 }], { duration: motion.interface, easing: motion.easing, fill: 'both' });
+    let current: Animation;
+    try {
+      current = content.animate([{ height: `${start}px`, opacity: startOpacity }, { height: `${end}px`, opacity: opening ? 1 : 0 }], { duration: motion.interface, easing: motion.easing, fill: 'both' });
+    } catch {
+      element.open = opening;
+      content.style.overflow = '';
+      return;
+    }
     animation.current = current;
     current.finished.then(() => {
       if (animation.current !== current) return;
