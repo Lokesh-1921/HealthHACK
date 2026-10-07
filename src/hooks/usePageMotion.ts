@@ -23,6 +23,8 @@ export function usePageMotion() {
       if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
       let current = 'home';
       for (const section of sections) if (section.getBoundingClientRect().top <= height + 24) current = section.id;
+      // The short final section cannot always reach the header at the scroll limit.
+      if (max > 0 && scrollY >= max - 2) current = sections[sections.length - 1]?.id ?? current;
       setActive(previous => previous === current ? previous : current);
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
