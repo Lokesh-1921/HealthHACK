@@ -11,6 +11,7 @@ A responsive event website for **Global Health Access Innovation Challenge – N
 - Responsive split hero with the complete healthcare illustration extracted from the event brochure.
 - Ten healthcare innovation tracks, seven timeline milestones, five prizes, and team registration information.
 - Organizing committee, coordinators, industry partners, institutional profiles, and participation FAQs.
+- Compact Coordinator contact cards with supplied portraits and call, WhatsApp, and SMS links.
 - Registration links, the brochure's original QR code, downloadable PDF, and email contact.
 - Sticky navigation, working URL fragments, smooth scrolling, active-section indicators, and back-to-top navigation.
 - Staggered entrances, one-time scroll reveals, animated accordions, and menu opening/closing transitions.
@@ -69,6 +70,7 @@ Once the final public domain is selected, add it to the canonical and Open Graph
 ## Content and assets
 
 - `src/data/event.ts`: current-edition event data, dates, tracks, prizes, committee, coordinators, partners, institutional profiles, and registration destination.
+- `src/data/coordinator.ts`: coordinator contact details and portrait framing.
 - `src/data/previousEdition.json`: historical reference data; its problem statements are not rendered as confirmed requirements for this edition.
 - `public/health-hackathon-3-brochure.pdf`: original two-page event brochure.
 - `public/assets/`: brochure artwork, institutional logos, event emblem, campus images, and registration QR code.
