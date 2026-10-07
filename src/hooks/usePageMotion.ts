@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { useSectionNavigation } from './useSectionNavigation';
 
 export const motion = { interface: 260, entrance: 600, stagger: 65, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' };
 
 /** Enhance visible content; never leave it hidden if observers or animation fail. */
 export function usePageMotion() {
-  const [active, setActive] = useState('home');
+  const active = useSectionNavigation();
   const [showBackToTop, setShowBackToTop] = useState(false);
   const progressRef = useRef<HTMLDivElement>(null);
 
@@ -13,13 +14,9 @@ export function usePageMotion() {
     const animations = new Set<Animation>();
     const seen = new WeakSet<Element>();
     const bursts = new WeakMap<Element, { started: number; count: number }>();
-    const sections = [...document.querySelectorAll<HTMLElement>('main section[id]')];
     const header = document.querySelector<HTMLElement>('.header');
     const artwork = document.querySelector<HTMLElement>('.hero-visual');
     let frame = 0;
-    let fragmentFrame = 0;
-    let disposed = false;
-    let fragmentCancelled = false;
     let observer: IntersectionObserver | undefined;
     let artworkObserver: IntersectionObserver | undefined;
     let artworkVisible = false;
@@ -32,11 +29,6 @@ export function usePageMotion() {
       document.documentElement.style.setProperty('--header-offset', `${height + 20}px`);
       const max = document.documentElement.scrollHeight - innerHeight;
       if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
-      let current = 'home';
-      for (const section of sections) if (section.getBoundingClientRect().top <= height + 24) current = section.id;
-      // The short final section cannot always reach the header at the scroll limit.
-      if (max > 0 && scrollY >= max - 2) current = sections[sections.length - 1]?.id ?? current;
-      setActive(previous => previous === current ? previous : current);
       setShowBackToTop(scrollY > innerHeight * 0.7);
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
@@ -97,38 +89,8 @@ export function usePageMotion() {
       if (artwork) artworkObserver.observe(artwork);
       } catch { observer?.disconnect(); /* Content is visible without this enhancement. */ }
     }
-    // Align direct links after fonts/load and the browser's scroll restoration.
-    // A user's first interaction cancels this initial alignment; normal anchors stay native.
-    const initialHash = location.hash;
-    const cancelFragment = () => { fragmentCancelled = true; };
-    const fragmentEvents = ['pointerdown', 'wheel', 'touchstart', 'keydown'] as const;
-    const removeFragmentListeners = () => fragmentEvents.forEach(type => window.removeEventListener(type, cancelFragment));
-    const alignFragment = () => {
-      document.fonts.ready.then(() => {
-        if (disposed || fragmentCancelled || location.hash !== initialHash) return;
-        fragmentFrame = requestAnimationFrame(() => {
-          fragmentFrame = requestAnimationFrame(() => {
-            if (!disposed && !fragmentCancelled && location.hash === initialHash) {
-              document.getElementById(fragment)?.scrollIntoView({ behavior: 'instant', block: 'start' });
-            }
-            removeFragmentListeners();
-          });
-        });
-      });
-    };
-    let fragment = initialHash.slice(1);
-    if (initialHash) {
-      try { fragment = decodeURIComponent(fragment); } catch { /* Keep malformed fragments harmless. */ }
-      fragmentEvents.forEach(type => window.addEventListener(type, cancelFragment, { passive: true }));
-      if (document.readyState === 'complete') alignFragment();
-      else window.addEventListener('load', alignFragment, { once: true });
-    }
     return () => {
-      disposed = true;
       if (frame) cancelAnimationFrame(frame);
-      if (fragmentFrame) cancelAnimationFrame(fragmentFrame);
-      window.removeEventListener('load', alignFragment);
-      removeFragmentListeners();
       observer?.disconnect();
       artworkObserver?.disconnect();
       if (artwork) delete artwork.dataset.inView;

@@ -4,7 +4,7 @@ import { ChevronDown, MoreHorizontal, X } from 'lucide-react';
 import type { NavigationLink } from '../data/navigation';
 import { motion } from '../hooks/usePageMotion';
 
-export default function NavigationDropdown({ links, active, mobile = false, onNavigate }: { links: readonly NavigationLink[]; active: string; mobile?: boolean; onNavigate: (event: MouseEvent<HTMLAnchorElement>) => void }) {
+export default function NavigationDropdown({ links, active, mobile = false }: { links: readonly NavigationLink[]; active: string; mobile?: boolean }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const button = useRef<HTMLButtonElement>(null);
@@ -86,7 +86,6 @@ export default function NavigationDropdown({ links, active, mobile = false, onNa
   const select = (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     close();
-    onNavigate(event);
   };
   const keys = (event: KeyboardEvent<HTMLElement>) => {
     const items = [...(panel.current?.querySelectorAll<HTMLAnchorElement>('a') ?? [])];

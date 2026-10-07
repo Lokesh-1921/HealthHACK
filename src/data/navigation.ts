@@ -6,6 +6,8 @@ export const navigationLinks = [
   ['awards', 'Awards'],
   ['committee', 'People'],
   ['registration', 'Registration'],
+  ['institutions', 'Institutions'],
+  ['participation', 'Participation'],
   ['coordinator', 'Coordinator'],
   ['contact', 'Contact'],
 ] as const;

@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { navigationLinks } from '../data/navigation';
 import NavigationDropdown from './NavigationDropdown';
@@ -64,18 +63,11 @@ export default function Navigation({ active, registerHref, completed }: { active
     return () => { observer?.disconnect(); window.removeEventListener('resize', update); };
   }, [active, visibleCount]);
 
-  const select = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    const target = document.getElementById(event.currentTarget.hash.slice(1));
-    // Let native anchors retain hashes, history, smooth scrolling, and offsets.
-    requestAnimationFrame(() => target?.focus({ preventScroll: true }));
-  };
-
   return <>
     <div ref={available} className="desktop-navigation">
       <nav ref={desktop} className="desktop-nav" aria-label="Main navigation">
-        {navigationLinks.slice(0, visibleCount).map(([id,label]) => <a className={active === id ? 'active' : ''} aria-current={active === id ? 'location' : undefined} key={id} href={`#${id}`} onClick={select}>{label}</a>)}
-        <NavigationDropdown links={overflowLinks} active={active} onNavigate={select}/>
+        {navigationLinks.slice(0, visibleCount).map(([id,label]) => <a className={active === id ? 'active' : ''} aria-current={active === id ? 'location' : undefined} key={id} href={`#${id}`}>{label}</a>)}
+        <NavigationDropdown links={overflowLinks} active={active}/>
         <span className="nav-indicator" aria-hidden="true" style={{ transform: `translateX(${indicator.x}px) scaleX(${indicator.width})`, opacity: indicator.visible ? 1 : 0 }}/>
         <div ref={measurements} className="nav-measure" aria-hidden="true" inert>
           {navigationLinks.map(([id,label]) => <span data-link-width key={id}>{label}</span>)}
@@ -84,6 +76,6 @@ export default function Navigation({ active, registerHref, completed }: { active
       </nav>
     </div>
     <a className="button header-register" href={registerHref} target="_blank" rel="noopener noreferrer">{completed ? 'Brochure' : 'Register now'}</a>
-    <NavigationDropdown links={navigationLinks} active={active} mobile onNavigate={select}/>
+    <NavigationDropdown links={navigationLinks} active={active} mobile/>
   </>;
 }
