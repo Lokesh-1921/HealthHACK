@@ -4,7 +4,7 @@
 
 - Project root: the directory containing `package.json` and `vercel.json` (`health-hackathon` within the supplied workspace).
 - Framework: Vite; Node: 22.x; install: `npm ci`; build: `npm run build`; output: `dist`.
-- No required environment variables or backend services. Fragment-based navigation needs no SPA rewrite. Existing Sites metadata does not affect Vercel.
+- No required environment variables or backend services. Fragment-based navigation needs no SPA rewrite.
 - Removed the previous host's hard-coded `og:url`; set the final domain in the HTML metadata once selected.
 
 ## Production verification
