@@ -10,8 +10,8 @@ export const coordinatorContacts = [
     portrait: { src: '/assets/coordinators/aditya-nagathan.jpeg', width: 716, height: 1060, scale: 2.4, x: 49, y: 56 },
   },
   {
-    name: 'Navya Gupta', phone: '8171180217',
-    call: 'tel:+918171180217', whatsapp: 'https://wa.me/918171180217', sms: 'sms:+918171180217',
+    name: 'Navya Gupta', phone: '8959290625',
+    call: 'tel:+918959290625', whatsapp: 'https://wa.me/918959290625', sms: 'sms:+918959290625',
     portrait: { src: '/assets/coordinators/navya-gupta.jpg', width: 2996, height: 3744, scale: 2.05, x: 52, y: 20 },
   },
   {
