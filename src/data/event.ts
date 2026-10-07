@@ -50,7 +50,7 @@ export const committee: {title:string;people:Person[]}[] = [
  {name:'Dr. Sridevi Sarma',role:'Vice Dean for Graduate Education, Whiting School of Engineering | Professor, Biomedical Engineering | Associate Director, Institute for Computational Medicine | Johns Hopkins University, USA',portrait:{src:'/assets/committee/sridevi-sarma.webp',width:600,height:600,objectPosition:'50% 50%'}},
  {name:'Dr. T. B. Sridharan',role:'Pro-Vice Chancellor, VIT Bhopal University',portrait:{src:'/assets/committee/t-b-sridharan.jpeg',width:275,height:275,objectPosition:'50% 50%'}},
  {name:'Dr. Gyan Prakash Mishra',role:'Registrar, VIT Bhopal University',portrait:{src:'/assets/committee/gyan-prakash-mishra.png',width:762,height:1024,objectPosition:'50% 0%'}},
- {name:'Dr. Prabakar S.',role:'Director Operations, VIT Bhopal University'}]},
+ {name:'Dr. Prabakar S.',role:'Director Operations, VIT Bhopal University',portrait:{src:'/assets/committee/prabakar-s.jpeg',width:800,height:800,objectPosition:'50% 50%'}}]},
  {title:'Convenors',people:[
  {name:'Dr. Siddhartha Maiti',role:'Associate Professor & Programme Chair, School of Biosciences Engineering & Technology, VIT Bhopal University',portrait:{src:'/assets/committee/siddhartha-maiti.jpg',width:768,height:768,objectPosition:'50% 50%'}},
  {name:'Dr. Siddharth Singh Chouhan',role:'Assistant Professor Senior & Programme Chair, School of Computing Science Engineering and Artificial Intelligence, VIT Bhopal University',portrait:{src:'/assets/committee/siddharth-singh-chouhan.jpg',width:600,height:600,objectPosition:'50% 50%'}},

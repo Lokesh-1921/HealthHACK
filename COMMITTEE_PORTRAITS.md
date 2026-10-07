@@ -2,7 +2,7 @@
 
 The 2027 brochure and existing committee records remain the authority for membership, names, roles, and affiliations. Portrait sources are used only for photographs. No previous-edition membership or role has been imported.
 
-Verified on 7 October 2026. Each downloaded asset opened successfully and was visually inspected. The reference HTML associates each image below with the named member through its image alt text and adjacent name. All 13 images are served from `/assets/committee/`; there are no remote image dependencies.
+Verified on 7 October 2026. Each downloaded asset opened successfully and was visually inspected. The reference HTML associates each image below with the named member through its image alt text and adjacent name. All 14 images, including the user-supplied photograph documented below, are served from `/assets/committee/`; there are no remote image dependencies.
 
 ## Reference website
 
@@ -35,9 +35,9 @@ VIT Bhopal's [Leadership page](https://vitbhopal.ac.in/leadership/) explicitly p
 
 Local files: `satish-kumar-modh.jpg` and `gyan-prakash-mishra.png`.
 
-## Portrait pending verification
+## User-supplied portrait
 
-Dr. Prabakar S. (Director Operations, VIT Bhopal University): an official university portrait could not be unambiguously verified for this current role. The current spelling is preserved. The card displays initials **PS**. Search results for similarly named people are not sufficient evidence to assign a photograph.
+Dr. Prabakar S. (Director Operations, VIT Bhopal University): the user supplied and identified this photograph on 7 October 2026. Source file: `WhatsApp Image 2026-10-07 at 18.04.19.jpeg`; local file: `prabakar-s.jpeg` (800 × 800). The original photograph is used without alteration. The current committee name and role are preserved.
 
 ## Presentation and maintenance
 
