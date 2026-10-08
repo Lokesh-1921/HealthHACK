@@ -101,8 +101,12 @@ export function useSectionNavigation() {
       clearTimeout(idleTimer);
       pending = { id: target.id, y: Math.min(limit(), Math.max(0, y)), lastY: scrollY, stable: 0, started: performance.now() };
       show(target.id);
-      target.focus({ preventScroll: true });
-      window.scrollTo({ top: pending.y, behavior: instant || preference.matches ? 'instant' : 'smooth' });
+      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: HTMLElement | number, options?: { offset?: number; immediate?: boolean }) => void } }).__lenis;
+      if (lenis && !preference.matches) {
+        lenis.scrollTo(instant ? pending.y : target, { offset: -(height() + 16), immediate: instant });
+      } else {
+        window.scrollTo({ top: pending.y, behavior: instant || preference.matches ? 'instant' : 'smooth' });
+      }
       schedule();
     };
     const interrupt = () => {
