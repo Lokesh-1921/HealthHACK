@@ -8,7 +8,7 @@ export function useSectionNavigation() {
   const [active, setActive] = useState('home');
 
   useEffect(() => {
-    const getSections = () => [...document.querySelectorAll<HTMLElement>('main section[id]')];
+    const sections = [...document.querySelectorAll<HTMLElement>('main section[id]')];
     const header = document.querySelector<HTMLElement>('.header');
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
     const restoration = history.scrollRestoration;
@@ -45,34 +45,29 @@ export function useSectionNavigation() {
       let id = hash.slice(1) || 'home';
       try { id = decodeURIComponent(id); } catch { return undefined; }
       if (id === 'main') id = 'home';
-      return document.getElementById(id) ?? getSections().find(section => section.id === id);
+      return sections.find(section => section.id === id);
     };
-    const topFor = (target: HTMLElement) => {
-      if (target.id === 'home') return 0;
-      const rect = target.getBoundingClientRect();
-      const currentScroll = window.scrollY;
-      const targetTop = currentScroll + rect.top;
-      const headerOffset = height() + 20;
-      return Math.min(limit(), Math.max(0, targetTop - headerOffset));
-    };
+    const topFor = (target: HTMLElement) => target.id === 'home' ? 0
+      : Math.min(limit(), Math.max(0, scrollY + target.getBoundingClientRect().top - height() - 20));
     const viewed = () => {
-      const sections = getSections();
       if (scrollY <= 8) return 'home';
       const max = limit();
-      if (max > 0 && (scrollY >= max - 8 || (activeId === 'contact' && scrollY >= max - 30))) {
-        return sections.at(-1)?.id ?? 'home';
-      }
-      const line = height() + 30;
+      if (max > 0 && (scrollY >= max - 4 || activeId === 'contact' && scrollY >= max - 24)) return sections.at(-1)?.id ?? 'home';
+      const line = height() + 24;
       let index = 0;
-      sections.forEach((section, i) => {
-        if (section.getBoundingClientRect().top <= line) index = i;
-      });
+      sections.forEach((section, i) => { if (section.getBoundingClientRect().top <= line) index = i; });
+      const previous = sections.findIndex(section => section.id === activeId);
+      // A small dead band prevents jitter when a heading sits on the activation line.
+      if (index > previous && sections[index].getBoundingClientRect().top > line - 6) return activeId;
+      if (index < previous && sections[previous]?.getBoundingClientRect().top < line + 6) return activeId;
       return sections[index]?.id ?? 'home';
     };
     const finish = () => {
       if (!pending) return;
       const id = pending.id;
       pending = undefined;
+      // A short section can share the same clamped position with its neighbor.
+      // Honor the chosen anchor at rest, while allowing the next manual movement freely.
       retained = { id, y: scrollY };
       sync(id);
       save();
@@ -81,22 +76,18 @@ export function useSectionNavigation() {
       frame = 0;
       if (initialPending) return;
       if (pending) {
-        const diff = Math.abs(scrollY - pending.y);
-        const reached = diff <= 3;
-        const elapsed = performance.now() - pending.started;
-        
-        if (Math.abs(scrollY - pending.lastY) < 1) {
-          pending.stable++;
-        } else {
-          pending.stable = 0;
-        }
+        pending.stable = Math.abs(scrollY - pending.lastY) < .5 ? pending.stable + 1 : 0;
         pending.lastY = scrollY;
-        
-        if (reached || (pending.stable >= 6 && elapsed > 600) || elapsed > 3000) {
+        const reached = Math.abs(scrollY - pending.y) <= 2;
+        if (pending.stable >= 4 && (reached || performance.now() - pending.started > 160)) {
+          const arrived = reached;
           finish();
-        } else {
-          frame = requestAnimationFrame(update);
-        }
+          if (!arrived) { retained = undefined; sync(viewed()); }
+        } else if (performance.now() - pending.started > 3000) {
+          pending = undefined;
+          retained = undefined;
+          sync(viewed());
+        } else frame = requestAnimationFrame(update);
         return;
       }
       if (retained && Math.abs(scrollY - retained.y) <= 1) return;
@@ -108,14 +99,13 @@ export function useSectionNavigation() {
       initialPending = false;
       retained = undefined;
       clearTimeout(idleTimer);
-      const targetY = Math.min(limit(), Math.max(0, y));
-      pending = { id: target.id, y: targetY, lastY: scrollY, stable: 0, started: performance.now() };
+      pending = { id: target.id, y: Math.min(limit(), Math.max(0, y)), lastY: scrollY, stable: 0, started: performance.now() };
       show(target.id);
-      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: HTMLElement | number, options?: { immediate?: boolean }) => void } }).__lenis;
+      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: HTMLElement | number, options?: { offset?: number; immediate?: boolean }) => void } }).__lenis;
       if (lenis && !preference.matches) {
-        lenis.scrollTo(targetY, { immediate: instant });
+        lenis.scrollTo(instant ? pending.y : target, { offset: -(height() + 16), immediate: instant });
       } else {
-        window.scrollTo({ top: targetY, behavior: instant || preference.matches ? 'instant' : 'smooth' });
+        window.scrollTo({ top: pending.y, behavior: instant || preference.matches ? 'instant' : 'smooth' });
       }
       schedule();
     };
@@ -128,11 +118,6 @@ export function useSectionNavigation() {
         window.scrollTo({ top: scrollY, left: scrollX, behavior: 'instant' });
       }
       schedule();
-    };
-    const userInterrupt = (event: Event) => {
-      const target = event.target as HTMLElement | null;
-      if (target?.closest('header, nav, a, button')) return;
-      interrupt();
     };
     const key = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement;
@@ -189,9 +174,9 @@ export function useSectionNavigation() {
     window.addEventListener('scroll', scrolled, { passive: true });
     window.addEventListener('scrollend', scrollEnded);
     window.addEventListener('resize', schedule);
-    window.addEventListener('wheel', userInterrupt, { passive: true });
-    window.addEventListener('touchstart', userInterrupt, { passive: true });
-    window.addEventListener('pointerdown', userInterrupt, { passive: true });
+    window.addEventListener('wheel', interrupt, { passive: true });
+    window.addEventListener('touchstart', interrupt, { passive: true });
+    window.addEventListener('pointerdown', interrupt, { passive: true });
     window.addEventListener('keydown', key);
     window.addEventListener('popstate', historyChanged);
     window.addEventListener('hashchange', historyChanged);

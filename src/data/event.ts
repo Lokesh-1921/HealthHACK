@@ -50,20 +50,20 @@ export const prizes = [
 ];
 export type Person = {name:string;role:string;portrait?:{src:string;width:number;height:number;objectPosition:string}};
 export const committee: {title:string;people:Person[]}[] = [
-  {title:'Chief Patron',people:[{name:"Hon’ble Dr. G. Viswanathan",role:'Founder & Chancellor, VIT Bhopal University',portrait:{src:'/assets/committee/g-viswanathan.webp',width:275,height:275,objectPosition:'50% 50%'}}]},
+  {title:'Chief Patron',people:[{name:"Hon’ble Dr. G. Viswanathan",role:'Founder & Chancellor, VIT Bhopal University',portrait:{src:'/assets/committee/g-viswanathan.jpg',width:275,height:275,objectPosition:'50% 50%'}}]},
   {title:'Patrons',people:[
-  {name:'Dr. Sankar Viswanathan',role:'Vice President, VIT Bhopal University',portrait:{src:'/assets/committee/sankar-viswanathan.webp',width:275,height:275,objectPosition:'50% 50%'}},
-  {name:'Ms. Kadhambari S. Viswanathan',role:'Assistant Vice President, VIT Bhopal University',portrait:{src:'/assets/committee/kadhambari-s-viswanathan.webp',width:275,height:275,objectPosition:'50% 50%'}},
-  {name:'Ms. Ramani Balasundaram',role:'Trustee, VIT Bhopal University',portrait:{src:'/assets/committee/ramani-balasundaram.webp',width:255,height:255,objectPosition:'50% 50%'}}]},
+  {name:'Dr. Sankar Viswanathan',role:'Vice President, VIT Bhopal University',portrait:{src:'/assets/committee/sankar-viswanathan.jpg',width:275,height:275,objectPosition:'50% 50%'}},
+  {name:'Ms. Kadhambari S. Viswanathan',role:'Assistant Vice President, VIT Bhopal University',portrait:{src:'/assets/committee/kadhambari-s-viswanathan.jpg',width:275,height:275,objectPosition:'50% 50%'}},
+  {name:'Ms. Ramani Balasundaram',role:'Trustee, VIT Bhopal University',portrait:{src:'/assets/committee/ramani-balasundaram.jpg',width:255,height:255,objectPosition:'50% 50%'}}]},
   {title:'Co-Patrons',people:[
-  {name:'Dr. Satish Kumar Modh',role:'Vice Chancellor, VIT Bhopal University',portrait:{src:'/assets/committee/satish-kumar-modh.webp',width:600,height:600,objectPosition:'50% 50%'}},
+  {name:'Dr. Satish Kumar Modh',role:'Vice Chancellor, VIT Bhopal University',portrait:{src:'/assets/committee/satish-kumar-modh.jpg',width:600,height:600,objectPosition:'50% 50%'}},
   {name:'Dr. Sridevi Sarma',role:'Vice Dean for Graduate Education, Whiting School of Engineering | Professor, Biomedical Engineering | Associate Director, Institute for Computational Medicine | Johns Hopkins University, USA',portrait:{src:'/assets/committee/sridevi-sarma.webp',width:600,height:600,objectPosition:'50% 50%'}},
-  {name:'Dr. T. B. Sridharan',role:'Pro-Vice Chancellor, VIT Bhopal University',portrait:{src:'/assets/committee/t-b-sridharan.webp',width:275,height:275,objectPosition:'50% 50%'}},
-  {name:'Dr. Gyan Prakash Mishra',role:'Registrar, VIT Bhopal University',portrait:{src:'/assets/committee/gyan-prakash-mishra.webp',width:762,height:1024,objectPosition:'50% 0%'}},
-  {name:'Dr. Prabakar S.',role:'Director Operations, VIT Bhopal University',portrait:{src:'/assets/committee/prabakar-s.webp',width:800,height:800,objectPosition:'50% 50%'}}]},
+  {name:'Dr. T. B. Sridharan',role:'Pro-Vice Chancellor, VIT Bhopal University',portrait:{src:'/assets/committee/t-b-sridharan.jpeg',width:275,height:275,objectPosition:'50% 50%'}},
+  {name:'Dr. Gyan Prakash Mishra',role:'Registrar, VIT Bhopal University',portrait:{src:'/assets/committee/gyan-prakash-mishra.png',width:762,height:1024,objectPosition:'50% 0%'}},
+  {name:'Dr. Prabakar S.',role:'Director Operations, VIT Bhopal University',portrait:{src:'/assets/committee/prabakar-s.jpeg',width:800,height:800,objectPosition:'50% 50%'}}]},
   {title:'Convenors',people:[
-  {name:'Dr. Siddhartha Maiti',role:'Associate Professor & Programme Chair, School of Biosciences Engineering & Technology, VIT Bhopal University',portrait:{src:'/assets/committee/siddhartha-maiti.webp',width:768,height:768,objectPosition:'50% 50%'}},
-  {name:'Dr. Siddharth Singh Chouhan',role:'Assistant Professor Senior & Programme Chair, School of Computing Science Engineering and Artificial Intelligence, VIT Bhopal University',portrait:{src:'/assets/committee/siddharth-singh-chouhan.webp',width:600,height:600,objectPosition:'50% 50%'}},
+  {name:'Dr. Siddhartha Maiti',role:'Associate Professor & Programme Chair, School of Biosciences Engineering & Technology, VIT Bhopal University',portrait:{src:'/assets/committee/siddhartha-maiti.jpg',width:768,height:768,objectPosition:'50% 50%'}},
+  {name:'Dr. Siddharth Singh Chouhan',role:'Assistant Professor Senior & Programme Chair, School of Computing Science Engineering and Artificial Intelligence, VIT Bhopal University',portrait:{src:'/assets/committee/siddharth-singh-chouhan.jpg',width:600,height:600,objectPosition:'50% 50%'}},
   {name:'Dr. Youseph Yazdi',role:'Associate Professor, Biomedical Engineering | Executive Director, Center for Bioengineering Innovation and Design (CBID) | Johns Hopkins University, USA',portrait:{src:'/assets/committee/youseph-yazdi.webp',width:300,height:300,objectPosition:'50% 50%'}},
   {name:'Dr. Hedy Alavi',role:'Associate Dean for Global Partnerships, Whiting School of Engineering | Johns Hopkins University, USA',portrait:{src:'/assets/committee/hedy-alavi.webp',width:300,height:300,objectPosition:'50% 50%'}}]},
   {title:'Co-Convenors',people:[{name:'Dr. Seenivasan R',role:'Director – International Relations Office | Professor, Center for Nanobiotechnology, VIT Vellore',portrait:{src:'/assets/committee/seenivasan-r.webp',width:326,height:326,objectPosition:'50% 50%'}}]},

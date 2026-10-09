@@ -63,49 +63,10 @@ export default function Navigation({ active, registerHref, completed }: { active
     return () => { observer?.disconnect(); window.removeEventListener('resize', update); };
   }, [active, visibleCount]);
 
-  const handleNavClick = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    const target = document.getElementById(id);
-    if (!target) return;
-    const header = document.querySelector<HTMLElement>('.header');
-    const headerOffset = (header?.getBoundingClientRect().height ?? 94) + 20;
-    let top = 0;
-    let curr: HTMLElement | null = target;
-    while (curr) {
-      top += curr.offsetTop;
-      curr = curr.offsetParent as HTMLElement | null;
-    }
-    const targetY = Math.max(0, top - headerOffset);
-    type LenisLike = { scrollTo: (target: HTMLElement | number, options?: { offset?: number; immediate?: boolean }) => void };
-    const lenis = (window as unknown as { __lenis?: LenisLike }).__lenis;
-    if (lenis && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      lenis.scrollTo(target, { offset: -headerOffset });
-    } else {
-      window.scrollTo({
-        top: targetY,
-        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-      });
-    }
-    try {
-      history.pushState(null, '', id === 'home' ? window.location.pathname : `#${id}`);
-    } catch {}
-  };
-
   return <>
     <div ref={available} className="desktop-navigation">
       <nav ref={desktop} className="desktop-nav" aria-label="Main navigation">
-        {navigationLinks.slice(0, visibleCount).map(([id,label]) => (
-          <a
-            className={active === id ? 'active' : ''}
-            aria-current={active === id ? 'location' : undefined}
-            key={id}
-            href={`#${id}`}
-            onClick={(e) => handleNavClick(e, id)}
-          >
-            {label}
-          </a>
-        ))}
+        {navigationLinks.slice(0, visibleCount).map(([id,label]) => <a className={active === id ? 'active' : ''} aria-current={active === id ? 'location' : undefined} key={id} href={`#${id}`}>{label}</a>)}
         <NavigationDropdown links={overflowLinks} active={active}/>
         <span className="nav-indicator" aria-hidden="true" style={{ transform: `translateX(${indicator.x}px) scaleX(${indicator.width})`, opacity: indicator.visible ? 1 : 0 }}/>
         <div ref={measurements} className="nav-measure" aria-hidden="true" inert>
