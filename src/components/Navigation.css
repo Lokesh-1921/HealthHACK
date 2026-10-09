@@ -43,7 +43,7 @@
   pointer-events: none;
   white-space: nowrap;
 }
-.nav-measure > span { font-size: 14px; font-weight: 550; padding: 12px 0; }
+.nav-measure > span { font-family: var(--font-display); font-size: 16px; font-weight: 700; letter-spacing: .04em; padding: 12px 0; }
 .desktop-overflow .overflow-nav {
   right: 0;
   top: calc(100% + 26px);
