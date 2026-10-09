@@ -8,8 +8,9 @@ A responsive event website for **Global Health Access Innovation Challenge – N
 
 ## Features
 
-- Responsive split hero with the complete healthcare illustration extracted from the event brochure.
+- Responsive split hero with a scroll-driven photo runway on desktop and the complete healthcare illustration from the event brochure.
 - Ten healthcare innovation tracks, seven timeline milestones, five prizes, and team registration information.
+- Photo gallery of previous-edition moments with a keyboard-navigable lightbox.
 - Organizing committee, coordinators, industry partners, institutional profiles, and participation FAQs.
 - Compact Coordinator contact cards with supplied portraits and call, WhatsApp, and SMS links.
 - Registration links, the brochure's original QR code, downloadable PDF, and email contact.
@@ -18,9 +19,22 @@ A responsive event website for **Global Health Access Innovation Challenge – N
 - Keyboard-accessible controls, visible focus states, and support for reduced-motion preferences.
 - Timeline highlighting based on the Asia/Kolkata calendar and an automatic completed-event state after 29 January 2027.
 
-## Technology stack
+## Tech stack
 
-React 19, TypeScript 5, Vite 7, Tailwind CSS 4, and Lucide React icons. Motion uses lightweight CSS, IntersectionObserver, and the Web Animations API. Fonts are self-hosted.
+| Layer | Choice | Role |
+| --- | --- | --- |
+| UI | [React](https://react.dev/) 19 | Component tree, client state, and accessibility-focused interactions |
+| Language | [TypeScript](https://www.typescriptlang.org/) 5 | Typed application and data modules |
+| Bundler | [Vite](https://vite.dev/) 7 | Dev server, production build, and React plugin |
+| Styling | [Tailwind CSS](https://tailwindcss.com/) 4 | Utility classes via the Vite plugin, plus project CSS |
+| Icons | [Lucide React](https://lucide.dev/) | Interface icons |
+| Smooth scroll | [Lenis](https://github.com/darkroomengineering/lenis) | Wheel/touch scrolling with reduced-motion fallback |
+| Animation | CSS, IntersectionObserver, Web Animations API | Entrances, reveals, accordions, and hero slide progress |
+| Motion assets | [lottie-web](https://airbnb.io/lottie/) | Lottie runtime; `public/lottie/hero-bg.json` is available as a motion asset |
+| Hosting | [Vercel](https://vercel.com/) | Static Vite deploy (`vercel.json`, Node 22) |
+| Runtime | Node.js 22 | Local tooling and the production install/build environment |
+
+Fonts are self-hosted. There is no backend, database, or environment-variable configuration.
 
 ## Local setup
 
@@ -71,9 +85,11 @@ Once the final public domain is selected, add it to the canonical and Open Graph
 
 - `src/data/event.ts`: current-edition event data, dates, tracks, prizes, committee, coordinators, partners, institutional profiles, and registration destination.
 - `src/data/coordinator.ts`: coordinator contact details and portrait framing.
+- `src/data/gallery.ts`: previous-edition gallery photos, captions, and categories.
 - `src/data/previousEdition.json`: historical reference data; its problem statements are not rendered as confirmed requirements for this edition.
 - `public/health-hackathon-3-brochure.pdf`: original two-page event brochure.
 - `public/assets/`: brochure artwork, institutional logos, event emblem, campus images, and registration QR code.
+- `public/lottie/`: hero and gallery WebP photos plus `hero-bg.json`.
 - `public/fonts/`: self-hosted font files and their required license notices.
 - `IMPLEMENTATION_NOTES.md`: source precedence, asset provenance, and organizer confirmation items.
 - `MOTION_NOTES.md`: animation behavior and verification notes.
