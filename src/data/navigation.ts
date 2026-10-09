@@ -4,10 +4,11 @@ export const navigationLinks = [
   ['tracks', 'Focus areas'],
   ['timeline', 'Timeline'],
   ['awards', 'Awards'],
-  ['committee', 'People'],
   ['registration', 'Registration'],
+  ['gallery', 'Gallery'],
+  ['committee', 'People'],
   ['institutions', 'Institutions'],
-  ['participation', 'Participation'],
+  ['participation', 'FAQs'],
   ['coordinator', 'Coordinator'],
   ['contact', 'Contact'],
 ] as const;
