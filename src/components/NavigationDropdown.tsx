@@ -83,10 +83,44 @@ export default function NavigationDropdown({ links, active, mobile = false }: { 
   }, [mounted, close]);
   useEffect(() => () => { clearTimeout(timer.current); frames.current.forEach(cancelAnimationFrame); }, []);
 
-  const select = (event: MouseEvent<HTMLAnchorElement>) => {
+  const handleLinkClick = (event: MouseEvent<HTMLAnchorElement>, section: string) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
     close();
+
+    const target = document.getElementById(section);
+    if (!target) return;
+
+    const header = document.querySelector<HTMLElement>('.header');
+    const headerOffset = (header?.getBoundingClientRect().height ?? 94) + 20;
+
+    let top = 0;
+    let curr: HTMLElement | null = target;
+    while (curr) {
+      top += curr.offsetTop;
+      curr = curr.offsetParent as HTMLElement | null;
+    }
+    const targetY = Math.max(0, top - headerOffset);
+
+    type LenisLike = { scrollTo: (target: HTMLElement | number, options?: { offset?: number; immediate?: boolean }) => void };
+    const lenis = (window as unknown as { __lenis?: LenisLike }).__lenis;
+
+    if (lenis && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      lenis.scrollTo(target, { offset: -headerOffset });
+    } else {
+      window.scrollTo({
+        top: targetY,
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      });
+    }
+
+    try {
+      history.pushState(null, '', section === 'home' ? window.location.pathname : `#${section}`);
+    } catch {
+      // fallback
+    }
   };
+
   const keys = (event: KeyboardEvent<HTMLElement>) => {
     const items = [...(panel.current?.querySelectorAll<HTMLAnchorElement>('a') ?? [])];
     if (!items.length) return;
@@ -107,8 +141,19 @@ export default function NavigationDropdown({ links, active, mobile = false }: { 
       }}>
       {mobile ? <><MoreHorizontal className="menu-dots" aria-hidden="true"/><X className="menu-close" aria-hidden="true"/></> : <>More<ChevronDown size={15} aria-hidden="true"/></>}
     </button>
-    <nav ref={panel} id={id} className={`mobile-nav${mobile ? '' : ' overflow-nav'}`} aria-label={mobile ? 'Mobile navigation' : 'More navigation'} hidden={!mounted} inert={!open} aria-hidden={!open} data-open={open} onKeyDown={keys} onFocusCapture={event => { focusedItem.current = (event.target as HTMLElement).closest('a')?.getAttribute('href') ?? null; }}>
-      {links.map(([section,label],index) => <a key={section} href={`#${section}`} style={{ '--item-index': index } as CSSProperties} className={active === section ? 'active' : ''} aria-current={active === section ? 'location' : undefined} onClick={select}>{label}</a>)}
+    <nav ref={panel} id={id} className={`mobile-nav${mobile ? '' : ' overflow-nav'}`} aria-label={mobile ? 'Mobile navigation' : 'More navigation'} hidden={!mounted} aria-hidden={!open} data-open={open} onKeyDown={keys} onFocusCapture={event => { focusedItem.current = (event.target as HTMLElement).closest('a')?.getAttribute('href') ?? null; }}>
+      {links.map(([section,label],index) => (
+        <a
+          key={section}
+          href={`#${section}`}
+          style={{ '--item-index': index } as CSSProperties}
+          className={active === section ? 'active' : ''}
+          aria-current={active === section ? 'location' : undefined}
+          onClick={(e) => handleLinkClick(e, section)}
+        >
+          {label}
+        </a>
+      ))}
     </nav>
   </>;
   return mobile ? controls : <div className="desktop-overflow" hidden={!links.length}>{controls}</div>;
