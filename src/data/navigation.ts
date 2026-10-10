@@ -9,7 +9,7 @@ export const navigationLinks = [
   ['committee', 'People'],
   ['institutions', 'Institutions'],
   ['participation', 'FAQs'],
-  ['coordinator', 'Coordinator'],
+  ['coordinator', 'Student Coordinator'],
   ['contact', 'Contact'],
 ] as const;
 

@@ -33,7 +33,7 @@ function CoordinatorCard({ person, index }: { person: typeof coordinatorContacts
 export default function CoordinatorSection() {
   return <section id="coordinator" tabIndex={-1} className="coordinator-section" aria-labelledby="coordinator-heading">
     <div className="container">
-      <h2 id="coordinator-heading" className="coordinator-heading reveal">Coordinator</h2>
+      <h2 id="coordinator-heading" className="coordinator-heading reveal">Student Coordinator</h2>
       <div className="coordinator-grid" data-stagger>
         {coordinatorContacts.map((person, index) => <CoordinatorCard key={person.name} person={person} index={index}/>)}
       </div>
