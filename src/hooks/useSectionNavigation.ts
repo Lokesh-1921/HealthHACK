@@ -20,21 +20,23 @@ export function useSectionNavigation() {
     let disposed = false;
     let initialPending = true;
     let retained: { id: string; y: number } | undefined;
-    let pending: { id: string; y: number; lastY: number; stable: number; started: number } | undefined;
+    let pending:
+      { id: string; y: number; lastY: number; stable: number; started: number } | undefined;
 
     const height = () => header?.getBoundingClientRect().height ?? 94;
     const limit = () => Math.max(0, document.documentElement.scrollHeight - innerHeight);
     const show = (id: string) => {
       activeId = id;
-      setActive(previous => previous === id ? previous : id);
+      setActive((previous) => (previous === id ? previous : id));
     };
-    const hashFor = (id: string) => id === 'home' ? '' : `#${encodeURIComponent(id)}`;
+    const hashFor = (id: string) => (id === 'home' ? '' : `#${encodeURIComponent(id)}`);
     const urlFor = (hash: string) => `${location.pathname}${location.search}${hash}`;
     const stateAt = (hash: string, y: number) => ({
       ...(history.state && typeof history.state === 'object' ? history.state : {}),
       [positionKey]: { hash, y },
     });
-    const save = (hash = location.hash) => history.replaceState(stateAt(hash, scrollY), '', urlFor(hash));
+    const save = (hash = location.hash) =>
+      history.replaceState(stateAt(hash, scrollY), '', urlFor(hash));
     const sync = (id: string) => {
       show(id);
       const hash = hashFor(id);
@@ -43,9 +45,13 @@ export function useSectionNavigation() {
     };
     const targetFor = (hash: string) => {
       let id = hash.slice(1) || 'home';
-      try { id = decodeURIComponent(id); } catch { return undefined; }
+      try {
+        id = decodeURIComponent(id);
+      } catch {
+        return undefined;
+      }
       if (id === 'main') id = 'home';
-      return document.getElementById(id) ?? getSections().find(section => section.id === id);
+      return document.getElementById(id) ?? getSections().find((section) => section.id === id);
     };
     const topFor = (target: HTMLElement) => {
       if (target.id === 'home') return 0;
@@ -84,14 +90,14 @@ export function useSectionNavigation() {
         const diff = Math.abs(scrollY - pending.y);
         const reached = diff <= 3;
         const elapsed = performance.now() - pending.started;
-        
+
         if (Math.abs(scrollY - pending.lastY) < 1) {
           pending.stable++;
         } else {
           pending.stable = 0;
         }
         pending.lastY = scrollY;
-        
+
         if (reached || (pending.stable >= 6 && elapsed > 600) || elapsed > 3000) {
           finish();
         } else {
@@ -103,19 +109,36 @@ export function useSectionNavigation() {
       retained = undefined;
       sync(viewed());
     };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
     const navigate = (target: HTMLElement, y = topFor(target), instant = false) => {
       initialPending = false;
       retained = undefined;
       clearTimeout(idleTimer);
       const targetY = Math.min(limit(), Math.max(0, y));
-      pending = { id: target.id, y: targetY, lastY: scrollY, stable: 0, started: performance.now() };
+      pending = {
+        id: target.id,
+        y: targetY,
+        lastY: scrollY,
+        stable: 0,
+        started: performance.now(),
+      };
       show(target.id);
-      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: HTMLElement | number, options?: { immediate?: boolean }) => void } }).__lenis;
+      const lenis = (
+        window as unknown as {
+          __lenis?: {
+            scrollTo: (target: HTMLElement | number, options?: { immediate?: boolean }) => void;
+          };
+        }
+      ).__lenis;
       if (lenis && !preference.matches) {
         lenis.scrollTo(targetY, { immediate: instant });
       } else {
-        window.scrollTo({ top: targetY, behavior: instant || preference.matches ? 'instant' : 'smooth' });
+        window.scrollTo({
+          top: targetY,
+          behavior: instant || preference.matches ? 'instant' : 'smooth',
+        });
       }
       schedule();
     };
@@ -136,25 +159,52 @@ export function useSectionNavigation() {
     };
     const key = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement;
-      if (!event.defaultPrevented && scrollKeys.has(event.key) && !target.closest('input, textarea, select, [contenteditable="true"]')) interrupt();
+      if (
+        !event.defaultPrevented &&
+        scrollKeys.has(event.key) &&
+        !target.closest('input, textarea, select, [contenteditable="true"]')
+      )
+        interrupt();
     };
     const clicked = (event: MouseEvent) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
       const anchor = (event.target as Element).closest<HTMLAnchorElement>('a[href]');
-      if (!anchor || anchor.hasAttribute('download') || anchor.target && anchor.target !== '_self') return;
+      if (
+        !anchor ||
+        anchor.hasAttribute('download') ||
+        (anchor.target && anchor.target !== '_self')
+      )
+        return;
       const url = new URL(anchor.href, location.href);
-      if (url.origin !== location.origin || url.pathname !== location.pathname || url.search !== location.search || !url.hash) return;
+      if (
+        url.origin !== location.origin ||
+        url.pathname !== location.pathname ||
+        url.search !== location.search ||
+        !url.hash
+      )
+        return;
       const target = targetFor(url.hash);
       if (!target) return;
       event.preventDefault();
       save();
-      if (location.hash !== url.hash) history.pushState(stateAt(url.hash, topFor(target)), '', urlFor(url.hash));
+      if (location.hash !== url.hash)
+        history.pushState(stateAt(url.hash, topFor(target)), '', urlFor(url.hash));
       navigate(target);
     };
     const scrolled = () => {
       schedule();
       clearTimeout(idleTimer);
-      idleTimer = window.setTimeout(() => { if (!initialPending && !pending) save(); }, 160);
+      idleTimer = window.setTimeout(() => {
+        if (!initialPending && !pending) save();
+      }, 160);
     };
     const scrollEnded = () => {
       if (!initialPending && !pending) save();
@@ -162,13 +212,20 @@ export function useSectionNavigation() {
     };
     const historyChanged = () => {
       const target = targetFor(location.hash);
-      if (!target) { interrupt(); return; }
+      if (!target) {
+        interrupt();
+        return;
+      }
       const saved = history.state?.[positionKey];
-      const y = saved?.hash === location.hash && Number.isFinite(saved.y) ? saved.y : topFor(target);
+      const y =
+        saved?.hash === location.hash && Number.isFinite(saved.y) ? saved.y : topFor(target);
       navigate(target, y, true);
     };
     const reduced = () => {
-      if (preference.matches && pending) { window.scrollTo({ top: pending.y, behavior: 'instant' }); schedule(); }
+      if (preference.matches && pending) {
+        window.scrollTo({ top: pending.y, behavior: 'instant' });
+        schedule();
+      }
     };
     const initialHash = location.hash;
     const alignInitial = () => {
@@ -179,7 +236,10 @@ export function useSectionNavigation() {
             if (disposed || !initialPending) return;
             const target = targetFor(initialHash);
             if (target) navigate(target, topFor(target), true);
-            else { initialPending = false; schedule(); }
+            else {
+              initialPending = false;
+              schedule();
+            }
           });
         });
       });
@@ -196,7 +256,8 @@ export function useSectionNavigation() {
     window.addEventListener('popstate', historyChanged);
     window.addEventListener('hashchange', historyChanged);
     preference.addEventListener('change', reduced);
-    const resize = typeof ResizeObserver === 'function' && header ? new ResizeObserver(schedule) : undefined;
+    const resize =
+      typeof ResizeObserver === 'function' && header ? new ResizeObserver(schedule) : undefined;
     if (resize && header) resize.observe(header);
     if (document.readyState === 'complete') alignInitial();
     else window.addEventListener('load', alignInitial, { once: true });

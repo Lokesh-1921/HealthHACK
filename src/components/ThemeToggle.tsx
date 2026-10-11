@@ -8,7 +8,9 @@ const STORAGE_KEY = 'hh3_theme';
 
 export function getResolvedTheme(mode: ThemeMode): 'light' | 'dark' {
   if (mode === 'system') {
-    return typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    return typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
       : 'light';
   }
@@ -73,7 +75,7 @@ export default function ThemeToggle() {
   ];
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const currentIndex = modes.findIndex(m => m.id === mode);
+    const currentIndex = modes.findIndex((m) => m.id === mode);
     let nextIndex = -1;
 
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
@@ -102,7 +104,7 @@ export default function ThemeToggle() {
       >
         {/* Sliding active pill indicator */}
         <div className={`theme-slider-thumb theme-thumb-${mode}`} aria-hidden="true" />
-        {modes.map(item => {
+        {modes.map((item) => {
           const Icon = item.icon;
           const isSelected = mode === item.id;
           return (
