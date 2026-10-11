@@ -351,6 +351,17 @@ html[data-theme="dark"] .gallery-card {
 html[data-theme="dark"] .gallery-card-inner {
   background: #061524;
 }
+html[data-theme="dark"] .gallery-browser,
+html[data-theme="dark"] .gallery-video-section {
+  background: #0d2239;
+  border-color: #1f456b;
+}
+html[data-theme="dark"] .gallery-video-heading h3 { color: #edf5fa; }
+html[data-theme="dark"] .gallery-video-empty {
+  background: linear-gradient(135deg,#0a1b2e,#102945);
+  border-color: #315b7c;
+  color: #edf5fa;
+}
 html[data-theme="dark"] .gallery-more-btn {
   background: #102945;
   border-color: #245078;
