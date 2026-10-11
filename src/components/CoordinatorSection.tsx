@@ -82,7 +82,7 @@ export default function CoordinatorSection() {
     >
       <div className="container">
         <h2 id="coordinator-heading" className="coordinator-heading reveal">
-          Coordinator
+          Student Coordinator
         </h2>
         <div className="coordinator-grid" data-stagger>
           {coordinatorContacts.map((person, index) => (
