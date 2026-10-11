@@ -164,18 +164,6 @@ export default function GallerySection() {
                 className="lightbox-img"
               />
             </div>
-
-            {/* Lightbox Caption Bar */}
-            <div className="lightbox-caption-bar">
-              <div>
-                <span className="lightbox-category">{activePhoto.category}</span>
-                <h3 className="lightbox-title">{activePhoto.title}</h3>
-                <p className="lightbox-desc">{activePhoto.caption}</p>
-              </div>
-              <div className="lightbox-counter">
-                {activeIndex + 1} / {galleryPhotos.length}
-              </div>
-            </div>
           </div>
         </div>
       )}

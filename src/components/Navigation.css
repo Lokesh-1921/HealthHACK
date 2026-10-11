@@ -8,6 +8,20 @@
 .desktop-navigation .desktop-nav { margin-left: 0; align-items: center; white-space: nowrap; }
 .desktop-navigation .desktop-nav > a { flex-shrink: 0; }
 .header-register { flex-shrink: 0; white-space: nowrap; }
+.header-theme-wrapper {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+@media (max-width: 980px) {
+  .header-theme-wrapper {
+    margin-left: auto;
+  }
+  .menu-toggle {
+    margin-left: 8px !important;
+  }
+}
 .desktop-overflow { position: relative; }
 .desktop-overflow[hidden] { display: none; }
 .overflow-toggle {
