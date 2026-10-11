@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
 import { useSectionNavigation } from './useSectionNavigation';
 
-export const motion = { interface: 260, entrance: 600, stagger: 65, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' };
+export const motion = {
+  interface: 260,
+  entrance: 600,
+  stagger: 65,
+  easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+};
 
 declare global {
   interface Window {
@@ -51,7 +56,8 @@ export function usePageMotion() {
       document.documentElement.style.setProperty('--header-offset', `${height + 20}px`);
       const max = document.documentElement.scrollHeight - innerHeight;
       const currentScroll = lenis ? lenis.scroll : scrollY;
-      if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? currentScroll / max : 0})`;
+      if (progressRef.current)
+        progressRef.current.style.transform = `scaleX(${max > 0 ? currentScroll / max : 0})`;
       setShowBackToTop(currentScroll > innerHeight * 0.7);
     };
 
@@ -69,48 +75,69 @@ export function usePageMotion() {
           lenis = undefined;
           delete window.__lenis;
         }
-        animations.forEach(animation => animation.cancel());
+        animations.forEach((animation) => animation.cancel());
         animations.clear();
       }
     };
     preference.addEventListener('change', stopMotion);
 
     update();
-    const headerResize = typeof ResizeObserver === 'function' && header ? new ResizeObserver(update) : undefined;
+    const headerResize =
+      typeof ResizeObserver === 'function' && header ? new ResizeObserver(update) : undefined;
     if (headerResize && header) headerResize.observe(header);
 
     if (typeof IntersectionObserver === 'function') {
       try {
-        observer = new IntersectionObserver(entries => {
-          const now = performance.now();
-          for (const entry of entries) {
-            if (!entry.isIntersecting || seen.has(entry.target)) continue;
-            seen.add(entry.target);
-            observer?.unobserve(entry.target);
-            const element = entry.target as HTMLElement;
-            element.dataset.revealed = 'true';
-            const group = element.closest('[data-stagger]');
-            const previous = group ? bursts.get(group) : undefined;
-            const burst = previous && now - previous.started < motion.interface
-              ? previous : { started: now, count: 0 };
-            const position = group ? burst.count++ : 0;
-            if (group) bursts.set(group, burst);
-            if (preference.matches || typeof element.animate !== 'function') continue;
-            try {
-              const animation = element.animate([
-                { opacity: 0, translate: '0 16px' },
-                { opacity: 1, translate: '0 0' },
-              ], { duration: motion.entrance, delay: Math.min(position, 3) * motion.stagger, easing: motion.easing, fill: 'both' });
-              animations.add(animation);
-              animation.finished.then(() => {
-                animations.delete(animation);
-                animation.cancel();
-              }, () => animations.delete(animation));
-            } catch { /* Default styles keep content readable */ }
-          }
-        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-        document.querySelectorAll('.reveal').forEach(element => observer?.observe(element));
-      } catch { observer?.disconnect(); }
+        observer = new IntersectionObserver(
+          (entries) => {
+            const now = performance.now();
+            for (const entry of entries) {
+              if (!entry.isIntersecting || seen.has(entry.target)) continue;
+              seen.add(entry.target);
+              observer?.unobserve(entry.target);
+              const element = entry.target as HTMLElement;
+              element.dataset.revealed = 'true';
+              const group = element.closest('[data-stagger]');
+              const previous = group ? bursts.get(group) : undefined;
+              const burst =
+                previous && now - previous.started < motion.interface
+                  ? previous
+                  : { started: now, count: 0 };
+              const position = group ? burst.count++ : 0;
+              if (group) bursts.set(group, burst);
+              if (preference.matches || typeof element.animate !== 'function') continue;
+              try {
+                const animation = element.animate(
+                  [
+                    { opacity: 0, translate: '0 16px' },
+                    { opacity: 1, translate: '0 0' },
+                  ],
+                  {
+                    duration: motion.entrance,
+                    delay: Math.min(position, 3) * motion.stagger,
+                    easing: motion.easing,
+                    fill: 'both',
+                  }
+                );
+                animations.add(animation);
+                animation.finished.then(
+                  () => {
+                    animations.delete(animation);
+                    animation.cancel();
+                  },
+                  () => animations.delete(animation)
+                );
+              } catch {
+                /* Default styles keep content readable */
+              }
+            }
+          },
+          { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+        );
+        document.querySelectorAll('.reveal').forEach((element) => observer?.observe(element));
+      } catch {
+        observer?.disconnect();
+      }
     }
 
     return () => {
@@ -121,7 +148,7 @@ export function usePageMotion() {
       }
       observer?.disconnect();
       headerResize?.disconnect();
-      animations.forEach(animation => animation.cancel());
+      animations.forEach((animation) => animation.cancel());
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
       preference.removeEventListener('change', stopMotion);
