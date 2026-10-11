@@ -1,26 +1,38 @@
-import { useState, useEffect, useCallback } from 'react';
-import { X, ChevronLeft, ChevronRight, ChevronDown, Maximize2, Images, Sparkles } from 'lucide-react';
-import { galleryPhotos, type GalleryPhoto } from '../data/gallery';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Maximize2,
+  Images,
+  Sparkles,
+} from 'lucide-react';
+import { galleryPhotos, galleryYears, type GalleryPhoto, type GalleryYear } from '../data/gallery';
 
 export default function GallerySection() {
+  const [selectedYear, setSelectedYear] = useState<GalleryYear>('2026');
   const [activePhoto, setActivePhoto] = useState<GalleryPhoto | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
-  const activeIndex = activePhoto
-    ? galleryPhotos.findIndex(p => p.id === activePhoto.id)
-    : -1;
+  const filteredPhotos = useMemo(
+    () => galleryPhotos.filter((photo) => photo.year === selectedYear),
+    [selectedYear]
+  );
+
+  const activeIndex = activePhoto ? filteredPhotos.findIndex((p) => p.id === activePhoto.id) : -1;
 
   const handleNext = useCallback(() => {
-    if (activeIndex === -1) return;
-    const nextIdx = (activeIndex + 1) % galleryPhotos.length;
-    setActivePhoto(galleryPhotos[nextIdx]);
-  }, [activeIndex]);
+    if (activeIndex === -1 || filteredPhotos.length === 0) return;
+    const nextIdx = (activeIndex + 1) % filteredPhotos.length;
+    setActivePhoto(filteredPhotos[nextIdx]);
+  }, [activeIndex, filteredPhotos]);
 
   const handlePrev = useCallback(() => {
-    if (activeIndex === -1) return;
-    const prevIdx = (activeIndex - 1 + galleryPhotos.length) % galleryPhotos.length;
-    setActivePhoto(galleryPhotos[prevIdx]);
-  }, [activeIndex]);
+    if (activeIndex === -1 || filteredPhotos.length === 0) return;
+    const prevIdx = (activeIndex - 1 + filteredPhotos.length) % filteredPhotos.length;
+    setActivePhoto(filteredPhotos[prevIdx]);
+  }, [activeIndex, filteredPhotos]);
 
   // Keyboard navigation for lightbox
   useEffect(() => {
@@ -47,24 +59,52 @@ export default function GallerySection() {
               EVENT GALLERY
             </span>
             <h2>
-              Innovation in Action.<br />
+              Innovation in Action.
+              <br />
               <span>Glimpses of Health Hackathon.</span>
             </h2>
           </div>
           <p>
-            From midnight hardware prototyping to final jury pitches — explore real moments from our past editions.
+            From midnight hardware prototyping to final jury pitches — explore real moments from our
+            past editions.
           </p>
         </div>
 
-        {/* Photo Grid — Clean photos without any text overlay or filter tabs */}
+        {/* Year Filter Tabs */}
+        <div
+          className="gallery-filter-bar reveal"
+          role="tablist"
+          aria-label="Filter gallery by year"
+        >
+          {galleryYears.map((year) => {
+            const isSelected = selectedYear === year;
+            return (
+              <button
+                key={year}
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                className={`gallery-filter-tab ${isSelected ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedYear(year);
+                  setMobileExpanded(false);
+                }}
+              >
+                <span>{year}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Photo Grid */}
         <div className={`gallery-grid ${mobileExpanded ? 'is-expanded' : ''}`} data-stagger>
-          {galleryPhotos.map((photo, i) => (
+          {filteredPhotos.map((photo, i) => (
             <article
               key={photo.id}
               className="gallery-card reveal"
               tabIndex={0}
               onClick={() => setActivePhoto(photo)}
-              onKeyDown={e => {
+              onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   setActivePhoto(photo);
@@ -108,7 +148,8 @@ export default function GallerySection() {
         <div className="gallery-footnote reveal">
           <Sparkles size={18} />
           <p>
-            Health Hackathon brings together over <strong>3000+ innovators</strong>, clinical specialists, and world-class mentors across VIT Bhopal & Johns Hopkins.
+            Health Hackathon brings together over <strong>3000+ innovators</strong>, clinical
+            specialists, and world-class mentors across VIT Bhopal & Johns Hopkins.
           </p>
         </div>
       </div>
@@ -122,10 +163,7 @@ export default function GallerySection() {
           aria-label={activePhoto.title}
           onClick={() => setActivePhoto(null)}
         >
-          <div
-            className="lightbox-content"
-            onClick={e => e.stopPropagation()}
-          >
+          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
             {/* Close Button */}
             <button
               type="button"
@@ -158,11 +196,7 @@ export default function GallerySection() {
 
             {/* Image Container */}
             <div className="lightbox-image-wrap">
-              <img
-                src={activePhoto.src}
-                alt={activePhoto.title}
-                className="lightbox-img"
-              />
+              <img src={activePhoto.src} alt={activePhoto.title} className="lightbox-img" />
             </div>
           </div>
         </div>

@@ -13,4 +13,4 @@ export const navigationLinks = [
   ['contact', 'Contact'],
 ] as const;
 
-export type NavigationLink = typeof navigationLinks[number];
+export type NavigationLink = (typeof navigationLinks)[number];

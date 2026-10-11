@@ -69,7 +69,10 @@ export default function LottieHeroBg() {
     };
 
     // Use Lenis if available, otherwise native scroll
-    type LenisLike = { on: (e: string, cb: () => void) => void; off: (e: string, cb: () => void) => void };
+    type LenisLike = {
+      on: (e: string, cb: () => void) => void;
+      off: (e: string, cb: () => void) => void;
+    };
     const lenis = (window as Window & { __lenis?: LenisLike }).__lenis;
     if (lenis) {
       lenis.on('scroll', onScroll);
