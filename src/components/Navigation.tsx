@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { navigationLinks } from '../data/navigation';
 import NavigationDropdown from './NavigationDropdown';
+import ThemeToggle from './ThemeToggle';
 import './Navigation.css';
 
 export default function Navigation({ active, registerHref, completed }: { active: string; registerHref: string; completed: boolean }) {
@@ -115,6 +116,9 @@ export default function Navigation({ active, registerHref, completed }: { active
       </nav>
     </div>
     <a className="button header-register" href={registerHref} target="_blank" rel="noopener noreferrer">{completed ? 'Brochure' : 'Register now'}</a>
+    <div className="header-theme-wrapper">
+      <ThemeToggle />
+    </div>
     <NavigationDropdown links={navigationLinks} active={active} mobile/>
   </>;
 }
